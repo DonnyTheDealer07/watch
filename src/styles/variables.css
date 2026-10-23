@@ -1,0 +1,27 @@
+
+:root {
+  font-family: "Manrope", sans-serif;
+  color: #f0eee8;
+  background: #09191d;
+
+  --bg: #09191d;
+  --surface: #10272c;
+  --surface-light: #15343a;
+  --petrol: #397a7b;
+  --champagne: #d9c49c;
+  --ivory: #f0eee8;
+  --muted: #91a3a3;
+  --line: rgba(217, 196, 156, 0.18);
+
+  --font-display: "Cormorant Garamond", serif;
+  --font-body: "Manrope", sans-serif;
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+}
+
+::selection {
+  background: var(--champagne);
+  color: var(--bg);
+}

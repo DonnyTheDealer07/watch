@@ -1,0 +1,121 @@
+.chronos-audio-toggle {
+  position: absolute;
+  z-index: 20;
+
+  top: 36px;
+  right: 6%;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 13px;
+
+  min-height: 44px;
+  padding: 0 18px;
+
+  border: 1px solid rgba(217, 196, 156, 0.28);
+  border-radius: 2px;
+
+  background: rgba(7, 19, 22, 0.65);
+  color: #d9c49c;
+
+  font-family: "Manrope", sans-serif;
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 0.19em;
+
+  cursor: pointer;
+  pointer-events: auto;
+
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+
+  transition:
+    border-color 0.3s ease,
+    background 0.3s ease,
+    color 0.3s ease,
+    transform 0.3s ease;
+}
+
+.chronos-audio-toggle:hover {
+  border-color: rgba(217, 196, 156, 0.7);
+  background: rgba(20, 43, 46, 0.85);
+  transform: translateY(-2px);
+}
+
+.chronos-audio-toggle:focus-visible {
+  outline: 2px solid #f0d9a5;
+  outline-offset: 4px;
+}
+
+.chronos-audio-toggle--active {
+  border-color: rgba(217, 196, 156, 0.5);
+  background: rgba(22, 43, 44, 0.8);
+}
+
+.chronos-audio-toggle__icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 20px;
+  height: 20px;
+}
+
+.chronos-audio-toggle__text {
+  white-space: nowrap;
+}
+
+.chronos-audio-toggle__indicator {
+  width: 5px;
+  height: 5px;
+
+  border-radius: 50%;
+
+  background: #617477;
+
+  transition:
+    background 0.3s ease,
+    box-shadow 0.3s ease;
+}
+
+.chronos-audio-toggle__indicator--active {
+  background: #d9c49c;
+
+  box-shadow:
+    0 0 8px rgba(217, 196, 156, 0.65);
+}
+
+@media (max-width: 900px) {
+  .chronos-audio-toggle {
+    top: 22px;
+    right: 7%;
+
+    min-height: 40px;
+    padding: 0 12px;
+
+    gap: 9px;
+    font-size: 8px;
+  }
+}
+
+@media (max-width: 480px) {
+  .chronos-audio-toggle {
+    top: 18px;
+    right: 5%;
+
+    min-height: 38px;
+    padding: 0 10px;
+  }
+
+  .chronos-audio-toggle__text {
+    letter-spacing: 0.1em;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .chronos-audio-toggle,
+  .chronos-audio-toggle__indicator {
+    transition: none;
+  }
+}
