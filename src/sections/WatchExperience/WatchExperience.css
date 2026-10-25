@@ -1,3 +1,4 @@
+
 .watch-experience {
   position: relative;
   height: 950vh;
@@ -7,89 +8,54 @@
 .watch-stage {
   position: sticky;
   top: 0;
-
   width: 100%;
   height: 100vh;
   height: 100svh;
-
   overflow: hidden;
   isolation: isolate;
-
-  background:
-    radial-gradient(
-      ellipse at 65% 50%,
-      #1b3d40 0%,
-      #10282c 29%,
-      #091b1f 59%,
-      #071417 100%
-    );
+  background: #05070a;
 }
-
-/* Atmospheric teal lighting */
 
 .watch-ambient {
   position: absolute;
   z-index: 0;
-
   width: 65vw;
   height: 65vw;
-
   max-width: 1000px;
   max-height: 1000px;
-
   top: 50%;
   left: 65%;
-
   transform: translate(-50%, -50%);
-
   border-radius: 50%;
-
   background: rgba(57, 122, 123, 0.13);
-
   filter: blur(110px);
-
   pointer-events: none;
-
   animation: ambient-breathe 9s ease-in-out infinite;
 }
-
-/* Cinematic champagne-gold glow */
 
 .watch-cinematic-glow {
   position: absolute;
   z-index: 0;
-
   top: 50%;
   left: 67%;
-
   width: min(60vw, 850px);
   height: min(60vw, 850px);
-
   border-radius: 50%;
-
   transform: translate(-50%, -50%);
-
-  background:
-    radial-gradient(
-      circle,
-      rgba(217, 196, 156, 0.12) 0%,
-      rgba(217, 196, 156, 0.055) 30%,
-      transparent 70%
-    );
-
+  background: radial-gradient(
+    circle,
+    rgba(217, 196, 156, 0.12) 0%,
+    rgba(217, 196, 156, 0.055) 30%,
+    transparent 70%
+  );
   opacity: calc(
     var(--macro-strength, 0) * 0.6 +
     var(--finale-strength, 0) * 0.9
   );
-
   filter: blur(50px);
-
   pointer-events: none;
-
   transition: opacity 0.35s ease;
 }
-
-/* Three.js canvas */
 
 .watch-canvas {
   position: absolute;
@@ -97,44 +63,33 @@
   z-index: 1;
 }
 
-/* Cinematic edge darkening */
-
 .watch-vignette {
   position: absolute;
   inset: 0;
   z-index: 2;
-
   pointer-events: none;
-
   background:
     linear-gradient(
       90deg,
-      rgba(7, 20, 23, 0.64) 0%,
-      rgba(7, 20, 23, 0.22) 34%,
-      transparent 64%
+      rgba(0, 0, 0, 0.32) 0%,
+      transparent 48%
     ),
     linear-gradient(
       0deg,
-      rgba(7, 20, 23, 0.4),
-      transparent 24%,
-      transparent 78%,
-      rgba(7, 20, 23, 0.2)
+      rgba(0, 0, 0, 0.24),
+      transparent 22%,
+      transparent 80%,
+      rgba(0, 0, 0, 0.12)
     );
 }
-
-/* Chapter typography */
 
 .watch-content {
   position: absolute;
   z-index: 3;
-
   top: 50%;
   left: 7%;
-
   width: min(37vw, 540px);
-
   transform: translateY(-50%);
-
   pointer-events: none;
 }
 
@@ -147,11 +102,8 @@
   display: flex;
   align-items: center;
   gap: 17px;
-
   margin-bottom: 35px;
-
   color: #d9c49c;
-
   font-family: "Manrope", sans-serif;
   font-size: 10px;
   font-weight: 600;
@@ -160,85 +112,60 @@
 
 .watch-eyebrow-line {
   display: block;
-
   width: 38px;
   height: 1px;
-
   background: #d9c49c;
-
   transform-origin: left center;
-
   animation: eyebrow-line-reveal 0.85s ease both;
 }
 
 .watch-chapter h1 {
   margin: 0;
-
   font-family: "Cormorant Garamond", serif;
-
   font-size: clamp(64px, 7.5vw, 132px);
   font-weight: 300;
-
   line-height: 0.86;
   letter-spacing: -0.055em;
-
   color: #f0eee8;
 }
 
-.watch-chapter h1 span {
+.watch-chapter h1 span,
+.watch-chapter h1 em {
   display: block;
 }
 
 .watch-chapter h1 em {
-  display: block;
-
   margin-top: 10px;
-
   color: #d9c49c;
   font-weight: 300;
-
   white-space: normal;
 }
 
 .watch-chapter p {
   max-width: 380px;
-
   margin-top: 37px;
-
   color: #b3c2bf;
-
   font-family: "Manrope", sans-serif;
   font-size: 13px;
   font-weight: 400;
-
   line-height: 2.05;
   letter-spacing: 0.015em;
 }
 
-/* Final CHRONOS signature */
-
 .watch-finale-signature {
   position: absolute;
   z-index: 3;
-
   right: 7%;
   bottom: 11%;
-
   display: flex;
   flex-direction: column;
   align-items: flex-end;
-
   gap: 9px;
-
   opacity: 0;
-
   transform: translateY(20px);
-
   transition:
     opacity 1.2s ease,
-    transform 1.2s
-      cubic-bezier(0.22, 1, 0.36, 1);
-
+    transform 1.2s cubic-bezier(0.22, 1, 0.36, 1);
   pointer-events: none;
 }
 
@@ -250,77 +177,54 @@
 .watch-finale-rule {
   width: 65px;
   height: 1px;
-
   margin-bottom: 8px;
-
   background: #d9c49c;
 }
 
 .watch-finale-brand {
   color: #f0eee8;
-
   font-family: "Cormorant Garamond", serif;
-
   font-size: clamp(25px, 3vw, 42px);
   font-weight: 400;
-
   letter-spacing: 0.15em;
 }
 
 .watch-finale-tagline {
   color: #d9c49c;
-
   font-family: "Manrope", sans-serif;
-
   font-size: 9px;
   font-weight: 600;
-
   letter-spacing: 0.35em;
 }
-
-/* Progress indicator */
 
 .watch-progress {
   position: absolute;
   z-index: 4;
-
   left: 7%;
   right: 7%;
   bottom: 39px;
-
   display: flex;
   align-items: center;
   gap: 24px;
-
   color: #d9c49c;
-
   font-family: "Manrope", sans-serif;
-
   font-size: 10px;
   letter-spacing: 0.15em;
-
   pointer-events: none;
 }
 
 .watch-progress-track {
   flex: 1;
-
   height: 1px;
-
   overflow: hidden;
-
   background: rgba(217, 196, 156, 0.2);
 }
 
 .watch-progress-fill {
   width: 0;
   height: 100%;
-
   background: #d9c49c;
-
-  box-shadow:
-    0 0 10px rgba(217, 196, 156, 0.45);
-
+  box-shadow: 0 0 10px rgba(217, 196, 156, 0.45);
   transition: width 0.12s linear;
 }
 
@@ -329,22 +233,151 @@
   text-align: right;
 }
 
+/* Cinematic environment */
+
+.watch-stage .cinematic-environment {
+  z-index: 0;
+}
+
+.cinematic-environment__shafts {
+  opacity: calc(var(--env-strength) * 0.85);
+}
+
+.cinematic-environment .light-shaft {
+  width: 36%;
+  opacity: 0.42;
+  filter: blur(45px);
+}
+
+.cinematic-environment__haze {
+  opacity: min(1, calc(var(--env-strength) * 1.5));
+}
+
+.cinematic-environment .cloud-one {
+  opacity: 0.65;
+}
+
+.cinematic-environment .cloud-two {
+  opacity: 0.32;
+}
+
+.cinematic-environment .cloud-three {
+  opacity: 0.4;
+}
+
+/* Interactive showroom */
+
+.watch-stage--showroom .watch-canvas {
+  z-index: 5;
+  touch-action: none;
+  cursor: grab;
+}
+
+.watch-stage--showroom .watch-canvas:active {
+  cursor: grabbing;
+}
+
+.watch-stage--showroom .watch-vignette {
+  z-index: 2;
+}
+
+.watch-stage--showroom .golden-reveal {
+  opacity: 0;
+}
+
+.showroom-enter,
+.showroom-panel {
+  position: absolute;
+  z-index: 8;
+}
+
+.showroom-enter {
+  right: 7%;
+  bottom: 23%;
+  padding: 16px 25px;
+  border: 1px solid rgba(217, 196, 156, 0.65);
+  background: rgba(5, 18, 17, 0.82);
+  color: #f0eee8;
+  font: 600 11px "Manrope", sans-serif;
+  letter-spacing: 0.2em;
+  cursor: pointer;
+  transition:
+    background 0.3s ease,
+    transform 0.3s ease;
+}
+
+.showroom-enter:hover {
+  background: #23413a;
+  transform: translateY(-3px);
+}
+
+.showroom-enter span {
+  margin-left: 18px;
+  font-size: 18px;
+}
+
+.showroom-panel {
+  left: 7%;
+  top: 50%;
+  transform: translateY(-50%);
+  max-width: 390px;
+  pointer-events: none;
+}
+
+.showroom-eyebrow {
+  color: #d9c49c;
+  font: 600 10px "Manrope", sans-serif;
+  letter-spacing: 0.26em;
+}
+
+.showroom-panel h2 {
+  margin: 25px 0 15px;
+  color: #f0eee8;
+  font: 300 clamp(55px, 6vw, 100px)
+    "Cormorant Garamond", serif;
+  line-height: 0.95;
+}
+
+.showroom-panel p {
+  color: #b3c2bf;
+  font: 13px/1.9 "Manrope", sans-serif;
+}
+
+.showroom-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 30px;
+  pointer-events: auto;
+}
+
+.showroom-actions button {
+  cursor: pointer;
+  border: 1px solid rgba(217, 196, 156, 0.55);
+  background: rgba(4, 16, 15, 0.8);
+  color: #f0eee8;
+  padding: 13px 18px;
+  font: 600 10px "Manrope", sans-serif;
+  letter-spacing: 0.14em;
+  transition: background 0.25s ease;
+}
+
+.showroom-actions button:hover {
+  background: #25453d;
+}
+
 /* Animations */
 
 @keyframes chapter-reveal {
-  0% {
+  from {
     opacity: 0;
-
     transform: translateY(35px);
-
     filter: blur(8px);
   }
 
-  100% {
+  to {
     opacity: 1;
-
     transform: translateY(0);
-
     filter: blur(0);
   }
 }
@@ -360,23 +393,18 @@
 }
 
 @keyframes ambient-breathe {
-  0%,
-  100% {
+  0%, 100% {
     opacity: 0.75;
-    transform:
-      translate(-50%, -50%)
-      scale(1);
+    transform: translate(-50%, -50%) scale(1);
   }
 
   50% {
     opacity: 1;
-    transform:
-      translate(-50%, -50%)
-      scale(1.12);
+    transform: translate(-50%, -50%) scale(1.12);
   }
 }
 
-/* Responsive */
+/* Responsive layouts */
 
 @media (max-width: 1100px) {
   .watch-content {
@@ -390,22 +418,10 @@
 }
 
 @media (max-width: 900px) {
-  .watch-stage {
-    background:
-      radial-gradient(
-        ellipse at 55% 63%,
-        #1b3d40 0%,
-        #10282c 32%,
-        #071417 85%
-      );
-  }
-
   .watch-content {
     top: 12%;
     left: 7%;
-
     width: 86%;
-
     transform: none;
   }
 
@@ -420,26 +436,13 @@
 
   .watch-chapter p {
     margin-top: 18px;
-
     max-width: 340px;
-
     font-size: 11px;
     line-height: 1.75;
   }
 
-  .watch-vignette {
-    background:
-      linear-gradient(
-        180deg,
-        rgba(7, 20, 23, 0.58) 0%,
-        transparent 47%,
-        rgba(7, 20, 23, 0.28) 100%
-      );
-  }
-
   .watch-cinematic-glow {
     left: 55%;
-
     width: 90vw;
     height: 90vw;
   }
@@ -453,6 +456,26 @@
     left: 7%;
     right: 7%;
     bottom: 30px;
+  }
+
+  .showroom-panel {
+    top: 9%;
+    left: 7%;
+    transform: none;
+  }
+
+  .showroom-panel h2 {
+    margin: 12px 0 6px;
+    font-size: 48px;
+  }
+
+  .showroom-actions {
+    margin-top: 12px;
+  }
+
+  .showroom-enter {
+    right: 7%;
+    bottom: 22%;
   }
 }
 
@@ -491,61 +514,4 @@
   .watch-cinematic-glow {
     transition: none;
   }
-}
-
-
-/* CHRONOS — Cinematic environment visibility fix */
-
-.watch-stage {
-  background: #05070a;
-}
-
-/* Keep the atmosphere behind the 3D watch */
-.watch-stage .cinematic-environment {
-  z-index: 0;
-}
-
-/* Allow atmospheric lighting to remain visible */
-.watch-stage .watch-vignette {
-  background:
-    linear-gradient(
-      90deg,
-      rgba(0, 0, 0, 0.32) 0%,
-      transparent 48%
-    ),
-    linear-gradient(
-      0deg,
-      rgba(0, 0, 0, 0.24),
-      transparent 22%,
-      transparent 80%,
-      rgba(0, 0, 0, 0.12)
-    );
-}
-
-/* Make the cinematic light shafts noticeable */
-.cinematic-environment__shafts {
-  opacity: calc(var(--env-strength) * 0.85);
-}
-
-.cinematic-environment .light-shaft {
-  width: 36%;
-  opacity: 0.42;
-  filter: blur(45px);
-}
-
-/* Stronger drifting atmosphere */
-.cinematic-environment__haze {
-  opacity: min(1, calc(var(--env-strength) * 1.5));
-}
-
-.cinematic-environment .cloud-one {
-  opacity: 0.65;
-}
-
-.cinematic-environment .cloud-two {
-  opacity: 0.32;
-}
-
-.cinematic-environment .cloud-three {
-  opacity: 0.4;
 }

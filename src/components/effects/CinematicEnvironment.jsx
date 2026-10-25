@@ -2,82 +2,70 @@
 import { useEffect, useRef } from "react";
 import "./CinematicEnvironment.css";
 
-/*
- * CHRONOS — CINEMATIC ENVIRONMENT ENGINE
- *
- * Smooth color interpolation across all six scenes.
- * No hard scene switching.
- * No sudden atmospheric intensity changes.
- */
-
 const SCENES = [
   {
     at: 0,
     name: "Obsidian Void",
-    base: [5, 7, 10],
-    glow: [65, 49, 32],
-    accent: [214, 177, 119],
-    strength: 0.32,
+    base: [3, 5, 7],
+    glow: [24, 20, 16],
+    accent: [175, 139, 86],
+    strength: 0.18,
   },
   {
     at: 0.12,
     name: "Engineering Chamber",
-    base: [5, 24, 32],
-    glow: [20, 81, 90],
-    accent: [91, 176, 173],
-    strength: 0.48,
+    base: [4, 16, 21],
+    glow: [14, 53, 62],
+    accent: [79, 151, 150],
+    strength: 0.46,
   },
   {
     at: 0.34,
     name: "Amber Furnace",
-    base: [30, 12, 9],
-    glow: [128, 53, 18],
-    accent: [245, 155, 76],
-    strength: 0.75,
+    base: [25, 11, 7],
+    glow: [105, 44, 15],
+    accent: [225, 135, 58],
+    strength: 0.65,
   },
   {
     at: 0.62,
     name: "White Laboratory",
-    base: [188, 194, 192],
-    glow: [242, 234, 217],
-    accent: [137, 111, 80],
-    strength: 0.2,
+    base: [146, 154, 153],
+    glow: [210, 205, 190],
+    accent: [125, 108, 86],
+    strength: 0.22,
   },
   {
     at: 0.86,
     name: "Crimson Atelier",
-    base: [32, 8, 17],
-    glow: [117, 29, 47],
-    accent: [227, 163, 117],
-    strength: 0.55,
+    base: [25, 6, 12],
+    glow: [85, 18, 32],
+    accent: [185, 111, 80],
+    strength: 0.46,
   },
   {
     at: 0.97,
     name: "Emerald Gallery",
-    base: [3, 24, 22],
-    glow: [16, 86, 67],
-    accent: [213, 185, 121],
-    strength: 0.72,
+    base: [2, 12, 11],
+    glow: [8, 39, 32],
+    accent: [187, 152, 91],
+    strength: 0.34,
   },
 ];
 
-const clamp = (value, min = 0, max = 1) =>
-  Math.min(max, Math.max(min, value));
+const clamp = (value) =>
+  Math.min(1, Math.max(0, value));
 
 const lerp = (a, b, t) => a + (b - a) * t;
 
-const smoothstep = (t) => {
+const ease = (t) => {
   const x = clamp(t);
   return x * x * (3 - 2 * x);
 };
 
 const rgb = (values) =>
-  `rgb(${values.map((v) => Math.round(v)).join(",")})`;
+  `rgb(${values.map(Math.round).join(",")})`;
 
-/*
- * Interpolate across the entire distance between
- * scene anchors instead of the final 5.5%.
- */
 function sampleScene(progress) {
   const p = clamp(progress);
 
@@ -85,38 +73,30 @@ function sampleScene(progress) {
     (scene) => scene.at > p
   );
 
-  if (index === -1) {
-    index = SCENES.length;
-  }
+  if (index === -1) index = SCENES.length;
 
-  const left = SCENES[Math.max(0, index - 1)];
-  const right =
-    SCENES[Math.min(index, SCENES.length - 1)];
+  const a = SCENES[Math.max(0, index - 1)];
+  const b = SCENES[
+    Math.min(index, SCENES.length - 1)
+  ];
 
-  const distance = right.at - left.at;
+  const range = b.at - a.at;
 
-  const raw =
-    distance <= 0
-      ? 0
-      : clamp((p - left.at) / distance);
+  const t = range <= 0
+    ? 0
+    : ease((p - a.at) / range);
 
-  const t = smoothstep(raw);
-
-  const blendColor = (key) =>
-    left[key].map((value, i) =>
-      lerp(value, right[key][i], t)
+  const color = (key) =>
+    a[key].map((value, i) =>
+      lerp(value, b[key][i], t)
     );
 
   return {
-    base: blendColor("base"),
-    glow: blendColor("glow"),
-    accent: blendColor("accent"),
-    strength: lerp(
-      left.strength,
-      right.strength,
-      t
-    ),
-    name: t < 0.5 ? left.name : right.name,
+    base: color("base"),
+    glow: color("glow"),
+    accent: color("accent"),
+    strength: lerp(a.strength, b.strength, t),
+    name: t < 0.5 ? a.name : b.name,
   };
 }
 
@@ -129,43 +109,35 @@ export default function CinematicEnvironment({
     const root = rootRef.current;
     if (!root) return;
 
-    let frame = 0;
+    let frame;
     let lastTime = 0;
-
-    // Smoothed progress follows the real scroll position.
     let displayedProgress =
       progressRef?.current?.value ?? 0;
 
     const update = (time) => {
-      const delta = lastTime
+      const dt = lastTime
         ? Math.min((time - lastTime) / 1000, 0.05)
         : 1 / 60;
 
       lastTime = time;
 
-      const targetProgress = clamp(
+      const target = clamp(
         progressRef?.current?.value ?? 0
       );
 
-      /*
-       * Frame-rate-independent damping.
-       *
-       * Larger values = faster response.
-       * Smaller values = softer cinematic movement.
-       */
-      const smoothing = 1 - Math.exp(-5 * delta);
+      const alpha = 1 - Math.exp(-4.5 * dt);
 
       displayedProgress = lerp(
         displayedProgress,
-        targetProgress,
-        smoothing
+        target,
+        alpha
       );
 
       if (
-        Math.abs(displayedProgress - targetProgress) <
+        Math.abs(displayedProgress - target) <
         0.00001
       ) {
-        displayedProgress = targetProgress;
+        displayedProgress = target;
       }
 
       const scene = sampleScene(displayedProgress);
@@ -197,9 +169,7 @@ export default function CinematicEnvironment({
 
     frame = requestAnimationFrame(update);
 
-    return () => {
-      cancelAnimationFrame(frame);
-    };
+    return () => cancelAnimationFrame(frame);
   }, [progressRef]);
 
   return (

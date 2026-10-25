@@ -6,6 +6,7 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import WatchScene from "../../three/WatchScene";
 import MechanicalAudio from "../../components/effects/MechanicalAudio";
 import CinematicEnvironment from "../../components/effects/CinematicEnvironment";
+import GoldenReveal from "../../components/effects/GoldenReveal";
 
 import "./WatchExperience.css";
 import "../../components/effects/MechanicalAudio.css";
@@ -15,7 +16,6 @@ gsap.registerPlugin(ScrollTrigger);
 const CHAPTERS = [
   {
     at: 0,
-    number: "00",
     label: "THE LAST SECOND",
     title: "TIME",
     italic: "is alive.",
@@ -24,7 +24,6 @@ const CHAPTERS = [
   },
   {
     at: 0.12,
-    number: "01",
     label: "THE DISASSEMBLY",
     title: "LOOK",
     italic: "closer.",
@@ -33,7 +32,6 @@ const CHAPTERS = [
   },
   {
     at: 0.2,
-    number: "02",
     label: "THE PROTECTION",
     title: "SAPPHIRE",
     italic: "crystal.",
@@ -42,7 +40,6 @@ const CHAPTERS = [
   },
   {
     at: 0.34,
-    number: "03",
     label: "THE POWER SOURCE",
     title: "STORED",
     italic: "energy.",
@@ -51,7 +48,6 @@ const CHAPTERS = [
   },
   {
     at: 0.48,
-    number: "04",
     label: "THE TRANSMISSION",
     title: "MOTION",
     italic: "transferred.",
@@ -60,7 +56,6 @@ const CHAPTERS = [
   },
   {
     at: 0.62,
-    number: "05",
     label: "THE ESCAPEMENT",
     title: "CONTROL",
     italic: "the moment.",
@@ -69,7 +64,6 @@ const CHAPTERS = [
   },
   {
     at: 0.75,
-    number: "06",
     label: "THE HEARTBEAT",
     title: "THE",
     italic: "balance.",
@@ -78,7 +72,6 @@ const CHAPTERS = [
   },
   {
     at: 0.86,
-    number: "07",
     label: "THE REASSEMBLY",
     title: "EVERYTHING",
     italic: "returns.",
@@ -87,7 +80,6 @@ const CHAPTERS = [
   },
   {
     at: 0.97,
-    number: "08",
     label: "CHRONOS / THE FINALE",
     title: "ONE",
     italic: "moment.",
@@ -113,6 +105,8 @@ export default function WatchExperience({ ready }) {
   const progressRef = useRef({ value: 0 });
 
   const [progress, setProgress] = useState(0);
+  const [showroom, setShowroom] = useState(false);
+  const [resetView, setResetView] = useState(0);
   const [activeIndex, setActiveIndex] = useState(0);
 
   useEffect(() => {
@@ -130,7 +124,6 @@ export default function WatchExperience({ ready }) {
 
         onUpdate: (self) => {
           const p = self.progress;
-
           progressRef.current.value = p;
 
           const percent = Math.round(p * 100);
@@ -158,6 +151,17 @@ export default function WatchExperience({ ready }) {
     };
   }, [ready]);
 
+  useEffect(() => {
+    if (!showroom) return;
+
+    const previous = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+
+    return () => {
+      document.body.style.overflow = previous;
+    };
+  }, [showroom]);
+
   const chapter = CHAPTERS[activeIndex];
   const isFinale = progress >= 97;
 
@@ -183,6 +187,8 @@ export default function WatchExperience({ ready }) {
     >
       <div
         className={`watch-stage ${
+          showroom ? "watch-stage--showroom" : ""
+        } ${
           isFinale ? "watch-stage--finale" : ""
         }`}
         style={{
@@ -197,39 +203,88 @@ export default function WatchExperience({ ready }) {
         <div className="watch-cinematic-glow" />
 
         <div className="watch-canvas">
-          <WatchScene progressRef={progressRef} />
+          <WatchScene
+            progressRef={progressRef}
+            showroom={showroom}
+            resetView={resetView}
+          />
         </div>
 
         <div className="watch-vignette" />
 
+        <GoldenReveal progressRef={progressRef} />
+
         <MechanicalAudio progressRef={progressRef} />
 
-        <div className="watch-content">
-          <div
-            key={activeIndex}
-            className="watch-chapter"
-          >
-            <div className="watch-eyebrow">
-              <span className="watch-eyebrow-line" />
-              {chapter.label}
+        {!showroom && (
+          <div className="watch-content">
+            <div
+              key={activeIndex}
+              className="watch-chapter"
+            >
+              <div className="watch-eyebrow">
+                <span className="watch-eyebrow-line" />
+                {chapter.label}
+              </div>
+
+              <h1>
+                <span>{chapter.title}</span>
+                <em>{chapter.italic}</em>
+              </h1>
+
+              <p>{chapter.description}</p>
             </div>
-
-            <h1>
-              <span>{chapter.title}</span>
-              <em>{chapter.italic}</em>
-            </h1>
-
-            <p>{chapter.description}</p>
           </div>
-        </div>
+        )}
+
+        {showroom ? (
+          <div className="showroom-panel">
+            <span className="showroom-eyebrow">
+              CHRONOS / PRIVATE SHOWROOM
+            </span>
+
+            <h2>Take control.</h2>
+
+            <p>
+              Drag to rotate. Scroll or pinch to zoom.
+            </p>
+
+            <div className="showroom-actions">
+              <button
+                type="button"
+                onClick={() =>
+                  setResetView((n) => n + 1)
+                }
+              >
+                RESET VIEW
+              </button>
+
+              <button
+                type="button"
+                onClick={() => setShowroom(false)}
+              >
+                EXIT SHOWROOM
+              </button>
+            </div>
+          </div>
+        ) : isFinale ? (
+          <button
+            type="button"
+            className="showroom-enter"
+            onClick={() => setShowroom(true)}
+          >
+            ENTER SHOWROOM
+            <span aria-hidden="true">↗</span>
+          </button>
+        ) : null}
 
         <div
           className={`watch-finale-signature ${
-            isFinale
+            isFinale && !showroom
               ? "watch-finale-signature--visible"
               : ""
           }`}
-          aria-hidden={!isFinale}
+          aria-hidden={!isFinale || showroom}
         >
           <span className="watch-finale-rule" />
 
@@ -242,20 +297,22 @@ export default function WatchExperience({ ready }) {
           </span>
         </div>
 
-        <div className="watch-progress">
-          <div className="watch-progress-track">
-            <div
-              className="watch-progress-fill"
-              style={{
-                width: `${progress}%`,
-              }}
-            />
-          </div>
+        {!showroom && (
+          <div className="watch-progress">
+            <div className="watch-progress-track">
+              <div
+                className="watch-progress-fill"
+                style={{
+                  width: `${progress}%`,
+                }}
+              />
+            </div>
 
-          <span>
-            {String(progress).padStart(2, "0")}%
-          </span>
-        </div>
+            <span>
+              {String(progress).padStart(2, "0")}%
+            </span>
+          </div>
+        )}
       </div>
     </section>
   );

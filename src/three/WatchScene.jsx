@@ -1,10 +1,10 @@
-
 import { useRef } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
 import * as THREE from "three";
 
 import WatchAssembly from "./WatchAssembly";
 import CameraRig from "./CameraRig";
+import ShowroomControls from "./ShowroomControls";
 
 import Atmosphere from "../components/effects/Atmosphere";
 import EnergyFlow from "../components/effects/EnergyFlow";
@@ -103,7 +103,10 @@ function sampleLighting(progress) {
       Math.min(index, LIGHT_SCENES.length - 1)
     ];
 
-  const start = Math.max(left.at, right.at - 0.055);
+  const start = Math.max(
+    left.at,
+    right.at - 0.055
+  );
 
   const raw =
     left === right
@@ -165,7 +168,12 @@ function CinematicLighting({ progressRef }) {
 
     const macro =
       THREE.MathUtils.smoothstep(p, 0.32, 0.4) *
-      (1 - THREE.MathUtils.smoothstep(p, 0.82, 0.88));
+      (1 -
+        THREE.MathUtils.smoothstep(
+          p,
+          0.82,
+          0.88
+        ));
 
     const finale = THREE.MathUtils.smoothstep(
       p,
@@ -300,7 +308,11 @@ function CinematicLighting({ progressRef }) {
   );
 }
 
-export default function WatchScene({ progressRef }) {
+export default function WatchScene({
+  progressRef,
+  showroom = false,
+  resetView = 0,
+}) {
   return (
     <Canvas
       camera={{
@@ -330,7 +342,14 @@ export default function WatchScene({ progressRef }) {
 
       <WatchAssembly progressRef={progressRef} />
 
-      <CameraRig progressRef={progressRef} />
+      <CameraRig
+        progressRef={progressRef}
+        showroom={showroom}
+      />
+
+      {showroom && (
+        <ShowroomControls resetView={resetView} />
+      )}
     </Canvas>
   );
 }
