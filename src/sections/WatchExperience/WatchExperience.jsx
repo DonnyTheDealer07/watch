@@ -1,9 +1,11 @@
+
 import { useEffect, useRef, useState } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 import WatchScene from "../../three/WatchScene";
 import MechanicalAudio from "../../components/effects/MechanicalAudio";
+import CinematicEnvironment from "../../components/effects/CinematicEnvironment";
 
 import "./WatchExperience.css";
 import "../../components/effects/MechanicalAudio.css";
@@ -188,7 +190,9 @@ export default function WatchExperience({ ready }) {
           "--finale-strength": finaleStrength,
         }}
       >
-        <div className="watch-ambient" />
+        <CinematicEnvironment
+          progressRef={progressRef}
+        />
 
         <div className="watch-cinematic-glow" />
 

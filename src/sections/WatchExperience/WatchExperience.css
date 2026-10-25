@@ -492,3 +492,60 @@
     transition: none;
   }
 }
+
+
+/* CHRONOS — Cinematic environment visibility fix */
+
+.watch-stage {
+  background: #05070a;
+}
+
+/* Keep the atmosphere behind the 3D watch */
+.watch-stage .cinematic-environment {
+  z-index: 0;
+}
+
+/* Allow atmospheric lighting to remain visible */
+.watch-stage .watch-vignette {
+  background:
+    linear-gradient(
+      90deg,
+      rgba(0, 0, 0, 0.32) 0%,
+      transparent 48%
+    ),
+    linear-gradient(
+      0deg,
+      rgba(0, 0, 0, 0.24),
+      transparent 22%,
+      transparent 80%,
+      rgba(0, 0, 0, 0.12)
+    );
+}
+
+/* Make the cinematic light shafts noticeable */
+.cinematic-environment__shafts {
+  opacity: calc(var(--env-strength) * 0.85);
+}
+
+.cinematic-environment .light-shaft {
+  width: 36%;
+  opacity: 0.42;
+  filter: blur(45px);
+}
+
+/* Stronger drifting atmosphere */
+.cinematic-environment__haze {
+  opacity: min(1, calc(var(--env-strength) * 1.5));
+}
+
+.cinematic-environment .cloud-one {
+  opacity: 0.65;
+}
+
+.cinematic-environment .cloud-two {
+  opacity: 0.32;
+}
+
+.cinematic-environment .cloud-three {
+  opacity: 0.4;
+}

@@ -1,0 +1,264 @@
+
+.cinematic-environment {
+  --env-base: rgb(5, 7, 10);
+  --env-glow: rgb(65, 49, 32);
+  --env-accent: rgb(214, 177, 119);
+  --env-strength: 0.32;
+
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  isolation: isolate;
+  pointer-events: none;
+
+  background: var(--env-base);
+}
+
+.cinematic-environment > div {
+  position: absolute;
+  pointer-events: none;
+}
+
+/* Main atmospheric glow */
+
+.cinematic-environment__glow {
+  inset: -35%;
+
+  background: radial-gradient(
+    ellipse at 62% 44%,
+    var(--env-glow) 0%,
+    transparent 52%
+  );
+
+  opacity: 0.78;
+  filter: blur(80px);
+
+  animation: chronos-breathe 16s
+    ease-in-out infinite alternate;
+}
+
+/* Deep layered atmosphere */
+
+.cinematic-environment__haze {
+  inset: -20%;
+  overflow: hidden;
+  opacity: var(--env-strength);
+}
+
+.cinematic-environment__cloud {
+  position: absolute;
+  width: 75%;
+  height: 70%;
+  border-radius: 50%;
+  filter: blur(90px);
+  will-change: transform;
+}
+
+.cloud-one {
+  top: -15%;
+  right: -12%;
+
+  background: radial-gradient(
+    ellipse,
+    var(--env-glow) 0%,
+    transparent 70%
+  );
+
+  opacity: 0.35;
+
+  animation: chronos-cloud-one 26s
+    ease-in-out infinite alternate;
+}
+
+.cloud-two {
+  bottom: -30%;
+  left: -20%;
+
+  background: radial-gradient(
+    ellipse,
+    var(--env-accent) 0%,
+    transparent 70%
+  );
+
+  opacity: 0.11;
+
+  animation: chronos-cloud-two 33s
+    ease-in-out infinite alternate;
+}
+
+.cloud-three {
+  top: 20%;
+  left: 25%;
+
+  background: radial-gradient(
+    ellipse,
+    var(--env-glow) 0%,
+    transparent 70%
+  );
+
+  opacity: 0.18;
+
+  animation: chronos-cloud-three 38s
+    ease-in-out infinite alternate;
+}
+
+/* Soft studio light shafts */
+
+.cinematic-environment__shafts {
+  inset: -35%;
+  opacity: calc(var(--env-strength) * 0.38);
+  mix-blend-mode: screen;
+}
+
+.light-shaft {
+  position: absolute;
+  top: -30%;
+  width: 28%;
+  height: 180%;
+
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    var(--env-accent) 48%,
+    transparent 100%
+  );
+
+  opacity: 0.14;
+  filter: blur(85px);
+  transform-origin: top center;
+  will-change: transform;
+}
+
+.shaft-one {
+  left: 32%;
+  transform: rotate(-24deg);
+
+  animation: chronos-shaft-one 23s
+    ease-in-out infinite alternate;
+}
+
+.shaft-two {
+  right: 18%;
+  opacity: 0.09;
+  transform: rotate(28deg);
+
+  animation: chronos-shaft-two 29s
+    ease-in-out infinite alternate;
+}
+
+/* Reuse the old grid layer as soft fill lighting */
+
+.cinematic-environment__grid {
+  inset: -25%;
+
+  background: radial-gradient(
+    ellipse at 75% 35%,
+    var(--env-accent),
+    transparent 48%
+  );
+
+  opacity: 0.07;
+  filter: blur(110px);
+
+  animation: chronos-breathe 20s
+    ease-in-out infinite alternate-reverse;
+}
+
+/* No grid lines or repeating-line textures */
+
+.cinematic-environment__grain {
+  inset: 0;
+  opacity: 0;
+}
+
+/* Atmospheric animation */
+
+@keyframes chronos-breathe {
+  from {
+    transform: translate3d(-2%, 0, 0) scale(1);
+  }
+
+  to {
+    transform: translate3d(2%, -2%, 0) scale(1.12);
+  }
+}
+
+@keyframes chronos-cloud-one {
+  from {
+    transform: translate3d(-8%, 2%, 0) scale(1);
+  }
+
+  to {
+    transform: translate3d(10%, -7%, 0) scale(1.2);
+  }
+}
+
+@keyframes chronos-cloud-two {
+  from {
+    transform: translate3d(8%, -5%, 0) scale(1.1);
+  }
+
+  to {
+    transform: translate3d(-9%, 7%, 0) scale(0.9);
+  }
+}
+
+@keyframes chronos-cloud-three {
+  from {
+    transform: translate3d(-6%, 6%, 0);
+  }
+
+  to {
+    transform: translate3d(8%, -8%, 0);
+  }
+}
+
+@keyframes chronos-shaft-one {
+  from {
+    transform: rotate(-28deg) translateX(-12%);
+  }
+
+  to {
+    transform: rotate(-14deg) translateX(12%);
+  }
+}
+
+@keyframes chronos-shaft-two {
+  from {
+    transform: rotate(30deg) translateX(10%);
+  }
+
+  to {
+    transform: rotate(14deg) translateX(-10%);
+  }
+}
+
+/* Mobile optimization */
+
+@media (max-width: 768px) {
+  .cinematic-environment__cloud {
+    filter: blur(65px);
+  }
+
+  .light-shaft {
+    filter: blur(65px);
+    opacity: 0.08;
+  }
+
+  .cinematic-environment__shafts {
+    opacity: calc(var(--env-strength) * 0.22);
+  }
+}
+
+/* Accessibility */
+
+@media (prefers-reduced-motion: reduce) {
+  .cinematic-environment__glow,
+  .cinematic-environment__cloud,
+  .cinematic-environment__grid,
+  .light-shaft {
+    animation: none;
+    will-change: auto;
+  }
+}
