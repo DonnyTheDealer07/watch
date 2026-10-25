@@ -1,0 +1,151 @@
+
+/* =========================================================
+   CHRONOS — ENTRANCE POLISH
+   Floating watch + typography alignment
+   ========================================================= */
+
+/*
+  FIX: The heavenly entrance animation previously
+  animated .watch-content itself.
+
+  That overwrote its existing translateY(-50%)
+  positioning, causing the headline to sit too low.
+
+  Keep the content container vertically centered.
+  Its child already has a chapter reveal animation.
+*/
+
+.chronos-arrival-complete .watch-content {
+  animation: none !important;
+  transform: translateY(-50%) !important;
+  opacity: 1;
+}
+
+/*
+  Prevent the entrance animation from making the
+  opening text appear before the reveal finishes.
+*/
+
+.chronos-arrival-active .watch-content {
+  opacity: 0 !important;
+}
+
+.chronos-arrival-complete .watch-chapter {
+  animation: chronos-text-return 1.15s
+    cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@keyframes chronos-text-return {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+    filter: blur(6px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+    filter: blur(0);
+  }
+}
+
+/* =========================================================
+   WATCH HOVER
+   ========================================================= */
+
+/*
+  Animate the actual WebGL canvas, rather than the
+  watch's component groups.
+
+  This preserves all internal component positions
+  and doesn't interfere with the existing assembly.
+*/
+
+.chronos-arrival-started
+  .watch-stage:not(.watch-stage--showroom)
+  .watch-canvas canvas {
+  animation: chronos-heavenly-hover 5.5s
+    ease-in-out infinite;
+  will-change: transform;
+}
+
+/*
+  Keep the hover after the heavenly overlay finishes.
+*/
+
+.chronos-arrival-complete
+  .watch-stage:not(.watch-stage--showroom)
+  .watch-canvas canvas {
+  animation: chronos-heavenly-hover 5.5s
+    ease-in-out infinite;
+  will-change: transform;
+}
+
+@keyframes chronos-heavenly-hover {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0);
+  }
+
+  50% {
+    transform: translate3d(0, -10px, 0);
+  }
+}
+
+/* =========================================================
+   SHOWROOM SAFETY
+   ========================================================= */
+
+/*
+  Never apply the floating animation in the
+  interactive showroom. The watch must remain
+  stable when visitors manipulate components.
+*/
+
+.watch-stage--showroom .watch-canvas canvas {
+  animation: none !important;
+  transform: none !important;
+  will-change: auto;
+}
+
+/* =========================================================
+   TYPOGRAPHY RESPONSIVENESS
+   ========================================================= */
+
+@media (min-width: 901px) {
+  .watch-content {
+    top: 50%;
+    left: 7%;
+    transform: translateY(-50%);
+  }
+
+  .watch-chapter h1 {
+    overflow-wrap: normal;
+  }
+}
+
+@media (max-width: 900px) {
+  .chronos-arrival-complete .watch-content {
+    transform: none !important;
+  }
+
+  .watch-chapter h1 {
+    font-size: clamp(56px, 12vw, 100px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .chronos-arrival-started
+    .watch-canvas canvas,
+  .chronos-arrival-complete
+    .watch-canvas canvas {
+    animation: none !important;
+  }
+
+  .chronos-arrival-complete .watch-chapter {
+    animation: none;
+    opacity: 1;
+    filter: none;
+    transform: none;
+  }
+}

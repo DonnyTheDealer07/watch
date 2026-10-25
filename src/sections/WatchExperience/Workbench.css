@@ -1,0 +1,153 @@
+
+/* CHRONOS — Interactive Watchmaker's Workbench */
+
+.showroom-panel--workbench {
+  width: min(400px, 38vw);
+  max-width: none;
+}
+
+.showroom-panel--workbench h2 {
+  font-size: clamp(44px, 5vw, 78px);
+  line-height: 0.95;
+}
+
+.showroom-panel--workbench h2 em {
+  display: block;
+  margin-top: 8px;
+  color: #d9c49c;
+  font-weight: 300;
+}
+
+.workbench-modes {
+  display: flex;
+  gap: 0;
+  width: fit-content;
+  margin-top: 27px;
+  border: 1px solid rgba(217, 196, 156, 0.38);
+  pointer-events: auto;
+}
+
+.workbench-modes button {
+  padding: 13px 17px;
+  border: 0;
+  background: rgba(5, 19, 19, 0.82);
+  color: #b3c2bf;
+  font: 600 10px "Manrope", sans-serif;
+  letter-spacing: 0.15em;
+  cursor: pointer;
+  transition:
+    color 0.25s ease,
+    background 0.25s ease;
+}
+
+.workbench-modes button + button {
+  border-left: 1px solid rgba(217, 196, 156, 0.25);
+}
+
+.workbench-modes button.is-active {
+  background: #d9c49c;
+  color: #071316;
+}
+
+.workbench-modes button:hover:not(.is-active) {
+  background: rgba(217, 196, 156, 0.12);
+  color: #f0eee8;
+}
+
+.workbench-selection {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 25px;
+  padding: 15px 0 15px 17px;
+  border-left: 1px solid #d9c49c;
+  animation: workbench-appear 0.35s ease both;
+}
+
+.workbench-selection span {
+  color: #d9c49c;
+  font: 600 9px "Manrope", sans-serif;
+  letter-spacing: 0.22em;
+}
+
+.workbench-selection strong {
+  color: #f0eee8;
+  font: 400 25px "Cormorant Garamond", serif;
+}
+
+.showroom-panel--workbench .showroom-actions {
+  margin-top: 26px;
+}
+
+.showroom-panel--workbench .showroom-actions button {
+  font-size: 9px;
+  padding: 12px 15px;
+}
+
+.watch-stage--showroom .watch-canvas {
+  touch-action: none;
+}
+
+@keyframes workbench-appear {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (max-width: 900px) {
+  .showroom-panel--workbench {
+    top: 7%;
+    left: 6%;
+    width: 88%;
+  }
+
+  .showroom-panel--workbench h2 {
+    margin: 12px 0;
+    font-size: clamp(35px, 8vw, 56px);
+  }
+
+  .showroom-panel--workbench p {
+    font-size: 11px;
+  }
+
+  .workbench-modes {
+    margin-top: 14px;
+  }
+
+  .workbench-modes button {
+    padding: 11px 12px;
+    font-size: 9px;
+  }
+
+  .workbench-selection {
+    margin-top: 12px;
+    padding-top: 8px;
+    padding-bottom: 8px;
+  }
+
+  .showroom-panel--workbench .showroom-actions {
+    margin-top: 14px;
+    gap: 7px;
+  }
+
+  .showroom-panel--workbench .showroom-actions button {
+    padding: 10px 11px;
+    font-size: 8px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .workbench-selection {
+    animation: none;
+  }
+
+  .workbench-modes button {
+    transition: none;
+  }
+}

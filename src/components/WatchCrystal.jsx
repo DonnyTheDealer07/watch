@@ -1,46 +1,66 @@
 
 import * as THREE from "three";
 
+const CRYSTAL_RADIUS = 0.637;
+
 export default function WatchCrystal() {
   return (
     <group>
-      {/* Thin transparent crystal */}
-      <mesh>
-        <circleGeometry args={[0.648, 128]} />
+      {/* Ultra-thin sapphire surface */}
+      <mesh renderOrder={2}>
+        <circleGeometry args={[CRYSTAL_RADIUS, 128]} />
+
         <meshPhysicalMaterial
-          color="#e6f7f4"
+          color="#f4fcfa"
           metalness={0}
-          roughness={0.035}
+          roughness={0.025}
           transparent
-          opacity={0.13}
+          opacity={0.065}
           transmission={0}
           depthWrite={false}
           side={THREE.DoubleSide}
           clearcoat={1}
-          clearcoatRoughness={0.02}
+          clearcoatRoughness={0.015}
+          polygonOffset
+          polygonOffsetFactor={-1}
         />
       </mesh>
 
-      {/* Sapphire perimeter */}
-      <mesh position={[0, 0, -0.005]}>
-        <torusGeometry args={[0.646, 0.008, 10, 128]} />
+      {/* Delicate polished sapphire edge */}
+      <mesh
+        position={[0, 0, -0.002]}
+        renderOrder={3}
+      >
+        <torusGeometry
+          args={[CRYSTAL_RADIUS, 0.0035, 10, 128]}
+        />
+
         <meshPhysicalMaterial
-          color="#b9e0dc"
-          metalness={0.15}
-          roughness={0.08}
+          color="#dceeea"
+          metalness={0.08}
+          roughness={0.055}
           transparent
-          opacity={0.48}
+          opacity={0.34}
           depthWrite={false}
+          clearcoat={1}
+          clearcoatRoughness={0.025}
         />
       </mesh>
 
-      {/* Single slim retaining rim */}
-      <mesh position={[0, 0, -0.015]}>
-        <torusGeometry args={[0.658, 0.007, 8, 128]} />
-        <meshStandardMaterial
-          color="#d9c49c"
-          metalness={0.96}
-          roughness={0.17}
+      {/* Very subtle glass reflection */}
+      <mesh
+        position={[-0.17, 0.24, 0.001]}
+        rotation={[0, 0, -0.52]}
+        renderOrder={4}
+      >
+        <planeGeometry args={[0.025, 0.29]} />
+
+        <meshBasicMaterial
+          color="#e6f8f3"
+          transparent
+          opacity={0.025}
+          depthWrite={false}
+          side={THREE.DoubleSide}
         />
       </mesh>
     </group>

@@ -1,3 +1,4 @@
+
 import { useRef } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
 import * as THREE from "three";
@@ -97,7 +98,9 @@ function sampleLighting(progress) {
 
   if (index === -1) index = LIGHT_SCENES.length;
 
-  const left = LIGHT_SCENES[Math.max(0, index - 1)];
+  const left =
+    LIGHT_SCENES[Math.max(0, index - 1)];
+
   const right =
     LIGHT_SCENES[
       Math.min(index, LIGHT_SCENES.length - 1)
@@ -175,11 +178,8 @@ function CinematicLighting({ progressRef }) {
           0.88
         ));
 
-    const finale = THREE.MathUtils.smoothstep(
-      p,
-      0.9,
-      1
-    );
+    const finale =
+      THREE.MathUtils.smoothstep(p, 0.9, 1);
 
     const pulse =
       Math.sin(time * 1.8) * 0.08 * macro;
@@ -312,6 +312,11 @@ export default function WatchScene({
   progressRef,
   showroom = false,
   resetView = 0,
+  disassemble = false,
+  reassembleVersion = 0,
+  dragging = false,
+  onDraggingChange,
+  onPartSelect,
 }) {
   return (
     <Canvas
@@ -330,17 +335,23 @@ export default function WatchScene({
       style={{
         width: "100%",
         height: "100%",
+        touchAction: showroom ? "none" : "auto",
       }}
     >
       <CinematicLighting progressRef={progressRef} />
 
       <Atmosphere progressRef={progressRef} />
-
       <FocusHalo progressRef={progressRef} />
-
       <EnergyFlow progressRef={progressRef} />
 
-      <WatchAssembly progressRef={progressRef} />
+      <WatchAssembly
+        progressRef={progressRef}
+        showroom={showroom}
+        disassemble={disassemble}
+        reassembleVersion={reassembleVersion}
+        onDraggingChange={onDraggingChange}
+        onPartSelect={onPartSelect}
+      />
 
       <CameraRig
         progressRef={progressRef}
@@ -348,7 +359,10 @@ export default function WatchScene({
       />
 
       {showroom && (
-        <ShowroomControls resetView={resetView} />
+        <ShowroomControls
+          resetView={resetView}
+          dragging={dragging}
+        />
       )}
     </Canvas>
   );

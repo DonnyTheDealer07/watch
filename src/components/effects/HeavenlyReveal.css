@@ -1,0 +1,528 @@
+
+/* =========================================================
+   CHRONOS — HEAVENLY REVEAL
+   ========================================================= */
+
+.chronos-app {
+  position: relative;
+}
+
+.chronos-arrival-active .watch-stage {
+  background: #020505;
+}
+
+/*
+  The watch stays hidden until the light has begun
+  revealing it. The existing 3D watch remains intact.
+*/
+
+.chronos-arrival-active .watch-canvas {
+  opacity: 0;
+}
+
+.chronos-arrival-started .watch-canvas {
+  animation: heavenly-watch-appear 4.9s ease both;
+}
+
+.chronos-arrival-active .watch-content,
+.chronos-arrival-active .watch-progress,
+.chronos-arrival-active .watch-finale-signature,
+.chronos-arrival-active .watch-cinematic-glow {
+  opacity: 0 !important;
+}
+
+.chronos-arrival-complete .watch-canvas {
+  opacity: 1;
+}
+
+.chronos-arrival-complete .watch-content,
+.chronos-arrival-complete .watch-progress {
+  animation: heavenly-interface-appear 1.1s ease both;
+}
+
+/* =========================================================
+   REVEAL CONTAINER
+   ========================================================= */
+
+.heavenly-reveal {
+  position: fixed;
+  inset: 0;
+  z-index: 9000;
+
+  overflow: hidden;
+  pointer-events: none;
+  isolation: isolate;
+
+  background: transparent;
+}
+
+/* =========================================================
+   INITIAL DARKNESS
+   ========================================================= */
+
+.heavenly-reveal__darkness {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+
+  background:
+    radial-gradient(
+      ellipse at 50% 48%,
+      rgba(16, 19, 16, 0.95),
+      #020303 65%
+    );
+
+  opacity: 1;
+}
+
+.heavenly-reveal--playing .heavenly-reveal__darkness {
+  animation: heavenly-darkness 4.9s ease both;
+}
+
+/* =========================================================
+   OVERHEAD LIGHT
+   ========================================================= */
+
+.heavenly-reveal__beam {
+  position: absolute;
+  z-index: 2;
+
+  left: 50%;
+  top: -18%;
+
+  width: min(68vw, 900px);
+  height: 108vh;
+
+  transform: translateX(-50%);
+  transform-origin: 50% 0;
+
+  opacity: 0;
+  mix-blend-mode: screen;
+
+  background:
+    radial-gradient(
+      ellipse at 50% 8%,
+      rgba(255, 246, 212, 0.52) 0%,
+      rgba(241, 205, 137, 0.16) 20%,
+      transparent 62%
+    ),
+    linear-gradient(
+      90deg,
+      transparent 0%,
+      rgba(228, 192, 118, 0.02) 18%,
+      rgba(255, 232, 176, 0.12) 39%,
+      rgba(255, 246, 217, 0.23) 50%,
+      rgba(255, 232, 176, 0.12) 61%,
+      rgba(228, 192, 118, 0.02) 82%,
+      transparent 100%
+    );
+
+  clip-path: polygon(
+    47% 0%,
+    53% 0%,
+    100% 100%,
+    0% 100%
+  );
+
+  filter: blur(17px);
+}
+
+.heavenly-reveal--playing .heavenly-reveal__beam {
+  animation: heavenly-beam-arrive 4.9s ease both;
+}
+
+/* Concentrated shaft of light */
+
+.heavenly-reveal__beam-core {
+  position: absolute;
+  inset: 0;
+
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 235, 184, 0.04) 32%,
+    rgba(255, 245, 211, 0.22) 50%,
+    rgba(255, 235, 184, 0.04) 68%,
+    transparent 100%
+  );
+
+  filter: blur(12px);
+}
+
+/* Wide atmospheric glow */
+
+.heavenly-reveal__beam-soft {
+  position: absolute;
+  inset: -5% -25%;
+
+  background: radial-gradient(
+    ellipse at 50% 28%,
+    rgba(249, 218, 156, 0.15),
+    rgba(217, 180, 116, 0.055) 38%,
+    transparent 70%
+  );
+
+  filter: blur(45px);
+}
+
+/* =========================================================
+   LIGHT SOURCE / CROWN
+   ========================================================= */
+
+.heavenly-reveal__crown {
+  position: absolute;
+  z-index: 3;
+
+  top: -14%;
+  left: 50%;
+
+  width: min(76vw, 1000px);
+  height: 48vh;
+
+  transform: translateX(-50%);
+
+  background: radial-gradient(
+    ellipse at 50% 0%,
+    rgba(255, 248, 222, 0.68),
+    rgba(255, 220, 153, 0.18) 30%,
+    transparent 72%
+  );
+
+  filter: blur(45px);
+  opacity: 0;
+}
+
+.heavenly-reveal--playing .heavenly-reveal__crown {
+  animation: heavenly-crown 4.9s ease both;
+}
+
+/* =========================================================
+   FLOATING GOLDEN DUST
+   ========================================================= */
+
+.heavenly-reveal__particles {
+  position: absolute;
+  inset: 0;
+  z-index: 4;
+
+  overflow: hidden;
+}
+
+.heavenly-reveal__particles span {
+  position: absolute;
+
+  left: calc(50% + var(--particle-x));
+  top: var(--particle-y);
+
+  width: 2px;
+  height: 2px;
+
+  border-radius: 50%;
+
+  background: #fff0bd;
+
+  box-shadow:
+    0 0 6px rgba(255, 223, 155, 0.8),
+    0 0 15px rgba(255, 207, 119, 0.35);
+
+  opacity: 0;
+}
+
+.heavenly-reveal--playing
+  .heavenly-reveal__particles span {
+  animation:
+    heavenly-particle-drift
+    var(--particle-duration)
+    var(--particle-delay)
+    ease-in-out
+    both;
+}
+
+/* =========================================================
+   LIGHT POOL
+   ========================================================= */
+
+.heavenly-reveal__floor-glow {
+  position: absolute;
+  z-index: 2;
+
+  left: 50%;
+  top: 66%;
+
+  width: min(76vw, 1000px);
+  height: 35vh;
+
+  transform: translateX(-50%);
+
+  background: radial-gradient(
+    ellipse at 50% 40%,
+    rgba(255, 224, 157, 0.22),
+    rgba(216, 170, 91, 0.08) 35%,
+    transparent 72%
+  );
+
+  filter: blur(30px);
+  opacity: 0;
+}
+
+.heavenly-reveal--playing
+  .heavenly-reveal__floor-glow {
+  animation: heavenly-floor 4.9s ease both;
+}
+
+/* =========================================================
+   REVEAL CAPTION
+   ========================================================= */
+
+.heavenly-reveal__caption {
+  position: absolute;
+  z-index: 5;
+
+  bottom: 12%;
+  left: 50%;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 18px;
+
+  width: 90%;
+  transform: translateX(-50%);
+
+  color: #e6d6b5;
+
+  font-family: var(--font-body, sans-serif);
+  font-size: 9px;
+  font-weight: 500;
+  letter-spacing: 0.38em;
+  text-align: center;
+
+  opacity: 0;
+}
+
+.heavenly-reveal--playing
+  .heavenly-reveal__caption {
+  animation: heavenly-caption 4.9s ease both;
+}
+
+.heavenly-reveal__line {
+  width: 32px;
+  height: 1px;
+
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(232, 205, 155, 0.65),
+    transparent
+  );
+}
+
+/* =========================================================
+   KEYFRAMES
+   ========================================================= */
+
+@keyframes heavenly-darkness {
+  0%,
+  13% {
+    opacity: 1;
+  }
+
+  36% {
+    opacity: 0.91;
+  }
+
+  63% {
+    opacity: 0.48;
+  }
+
+  83% {
+    opacity: 0.1;
+  }
+
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes heavenly-beam-arrive {
+  0%,
+  8% {
+    opacity: 0;
+    transform: translateX(-50%) scaleX(0.08);
+  }
+
+  27% {
+    opacity: 0.72;
+    transform: translateX(-50%) scaleX(0.42);
+  }
+
+  52% {
+    opacity: 0.88;
+    transform: translateX(-50%) scaleX(1);
+  }
+
+  72% {
+    opacity: 0.62;
+  }
+
+  100% {
+    opacity: 0;
+    transform: translateX(-50%) scaleX(1.12);
+  }
+}
+
+@keyframes heavenly-crown {
+  0%,
+  10% {
+    opacity: 0;
+  }
+
+  32% {
+    opacity: 0.9;
+  }
+
+  62% {
+    opacity: 0.65;
+  }
+
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes heavenly-floor {
+  0%,
+  20% {
+    opacity: 0;
+  }
+
+  48% {
+    opacity: 0.8;
+  }
+
+  75% {
+    opacity: 0.5;
+  }
+
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes heavenly-watch-appear {
+  0%,
+  28% {
+    opacity: 0;
+    filter: brightness(0.1);
+    transform: translateY(-35px) scale(0.96);
+  }
+
+  48% {
+    opacity: 0.42;
+    filter: brightness(0.55);
+  }
+
+  72% {
+    opacity: 1;
+    filter: brightness(1.12);
+    transform: translateY(0) scale(1);
+  }
+
+  100% {
+    opacity: 1;
+    filter: brightness(1);
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes heavenly-particle-drift {
+  0% {
+    opacity: 0;
+    transform: translate3d(0, -20px, 0);
+  }
+
+  30% {
+    opacity: 0.85;
+  }
+
+  75% {
+    opacity: 0.6;
+  }
+
+  100% {
+    opacity: 0;
+    transform: translate3d(18px, 75px, 0);
+  }
+}
+
+@keyframes heavenly-caption {
+  0%,
+  42% {
+    opacity: 0;
+    transform: translateX(-50%) translateY(12px);
+  }
+
+  58%,
+  76% {
+    opacity: 0.85;
+    transform: translateX(-50%) translateY(0);
+  }
+
+  100% {
+    opacity: 0;
+    transform: translateX(-50%) translateY(-8px);
+  }
+}
+
+@keyframes heavenly-interface-appear {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media (max-width: 900px) {
+  .heavenly-reveal__beam {
+    width: 115vw;
+    height: 110vh;
+  }
+
+  .heavenly-reveal__crown {
+    width: 120vw;
+  }
+
+  .heavenly-reveal__floor-glow {
+    width: 110vw;
+  }
+
+  .heavenly-reveal__caption {
+    bottom: 10%;
+    gap: 9px;
+    font-size: 7px;
+    letter-spacing: 0.2em;
+  }
+
+  .heavenly-reveal__line {
+    width: 18px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .heavenly-reveal--playing
+    .heavenly-reveal__particles span {
+    animation: none;
+  }
+
+  .chronos-arrival-started .watch-canvas {
+    animation: heavenly-watch-appear 0.3s ease both;
+  }
+}

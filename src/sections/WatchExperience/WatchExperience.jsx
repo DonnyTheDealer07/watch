@@ -9,6 +9,7 @@ import CinematicEnvironment from "../../components/effects/CinematicEnvironment"
 import GoldenReveal from "../../components/effects/GoldenReveal";
 
 import "./WatchExperience.css";
+import "./Workbench.css";
 import "../../components/effects/MechanicalAudio.css";
 
 gsap.registerPlugin(ScrollTrigger);
@@ -88,6 +89,19 @@ const CHAPTERS = [
   },
 ];
 
+const PART_NAMES = {
+  bracelet: "The Bracelet",
+  case: "The Watch Case",
+  movement: "Movement Plate",
+  mainspring: "The Mainspring",
+  gears: "The Gear Train",
+  escapement: "The Escapement",
+  balance: "The Balance Wheel",
+  dial: "The Dial",
+  hands: "The Hands",
+  crystal: "Sapphire Crystal",
+};
+
 function getActiveChapter(progress) {
   let index = 0;
 
@@ -105,9 +119,16 @@ export default function WatchExperience({ ready }) {
   const progressRef = useRef({ value: 0 });
 
   const [progress, setProgress] = useState(0);
+  const [activeIndex, setActiveIndex] = useState(0);
+
   const [showroom, setShowroom] = useState(false);
   const [resetView, setResetView] = useState(0);
-  const [activeIndex, setActiveIndex] = useState(0);
+
+  const [disassemble, setDisassemble] = useState(false);
+  const [reassembleVersion, setReassembleVersion] = useState(0);
+
+  const [dragging, setDragging] = useState(false);
+  const [selectedPart, setSelectedPart] = useState(null);
 
   useEffect(() => {
     if (!ready) return;
@@ -162,6 +183,29 @@ export default function WatchExperience({ ready }) {
     };
   }, [showroom]);
 
+  const enterShowroom = () => {
+    progressRef.current.value = 1;
+    setShowroom(true);
+    setDisassemble(false);
+    setSelectedPart(null);
+    setDragging(false);
+    setReassembleVersion((n) => n + 1);
+  };
+
+  const exitShowroom = () => {
+    setShowroom(false);
+    setDisassemble(false);
+    setSelectedPart(null);
+    setDragging(false);
+    setReassembleVersion((n) => n + 1);
+  };
+
+  const reassembleAll = () => {
+    setDragging(false);
+    setSelectedPart(null);
+    setReassembleVersion((n) => n + 1);
+  };
+
   const chapter = CHAPTERS[activeIndex];
   const isFinale = progress >= 97;
 
@@ -207,6 +251,11 @@ export default function WatchExperience({ ready }) {
             progressRef={progressRef}
             showroom={showroom}
             resetView={resetView}
+            disassemble={disassemble}
+            reassembleVersion={reassembleVersion}
+            dragging={dragging}
+            onDraggingChange={setDragging}
+            onPartSelect={setSelectedPart}
           />
         </div>
 
@@ -238,30 +287,69 @@ export default function WatchExperience({ ready }) {
         )}
 
         {showroom ? (
-          <div className="showroom-panel">
+          <div className="showroom-panel showroom-panel--workbench">
             <span className="showroom-eyebrow">
-              CHRONOS / PRIVATE SHOWROOM
+              CHRONOS / WATCHMAKER'S WORKBENCH
             </span>
 
-            <h2>Take control.</h2>
+            <h2>
+              Every piece.
+              <em> Your control.</em>
+            </h2>
 
             <p>
-              Drag to rotate. Scroll or pinch to zoom.
+              {disassemble
+                ? "Grab a component and drag it away from the watch."
+                : "Drag the background to rotate. Scroll or pinch to zoom."}
             </p>
 
+            <div className="workbench-modes">
+              <button
+                type="button"
+                className={!disassemble ? "is-active" : ""}
+                onClick={() => setDisassemble(false)}
+              >
+                EXPLORE
+              </button>
+
+              <button
+                type="button"
+                className={disassemble ? "is-active" : ""}
+                onClick={() => setDisassemble(true)}
+              >
+                DISASSEMBLE
+              </button>
+            </div>
+
+            {selectedPart && (
+              <div className="workbench-selection">
+                <span>SELECTED COMPONENT</span>
+                <strong>
+                  {PART_NAMES[selectedPart] || selectedPart}
+                </strong>
+              </div>
+            )}
+
             <div className="showroom-actions">
+              <button
+                type="button"
+                onClick={reassembleAll}
+              >
+                REASSEMBLE ALL
+              </button>
+
               <button
                 type="button"
                 onClick={() =>
                   setResetView((n) => n + 1)
                 }
               >
-                RESET VIEW
+                RESET CAMERA
               </button>
 
               <button
                 type="button"
-                onClick={() => setShowroom(false)}
+                onClick={exitShowroom}
               >
                 EXIT SHOWROOM
               </button>
@@ -271,7 +359,7 @@ export default function WatchExperience({ ready }) {
           <button
             type="button"
             className="showroom-enter"
-            onClick={() => setShowroom(true)}
+            onClick={enterShowroom}
           >
             ENTER SHOWROOM
             <span aria-hidden="true">↗</span>

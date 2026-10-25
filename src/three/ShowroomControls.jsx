@@ -8,7 +8,10 @@ import { ROOT_X } from "../utils/watchConfig";
 const TARGET = new THREE.Vector3(ROOT_X, 0, 0.25);
 const HOME_OFFSET = new THREE.Vector3(2.1, 1.15, 6.7);
 
-export default function ShowroomControls({ resetView }) {
+export default function ShowroomControls({
+  resetView = 0,
+  dragging = false,
+}) {
   const controls = useRef(null);
   const { camera, size } = useThree();
 
@@ -35,7 +38,7 @@ export default function ShowroomControls({ resetView }) {
     if (!control) return;
 
     if (!moving.current) {
-      control.enabled = true;
+      control.enabled = !dragging;
       return;
     }
 
@@ -73,14 +76,14 @@ export default function ShowroomControls({ resetView }) {
       ) < 0.012
     ) {
       moving.current = false;
-      control.enabled = true;
+      control.enabled = !dragging;
     }
   });
 
   return (
     <OrbitControls
       ref={controls}
-      enabled={false}
+      enabled={!dragging && !moving.current}
       enableDamping
       dampingFactor={0.075}
       enablePan={false}
